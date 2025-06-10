@@ -8,7 +8,8 @@
 #define ALTO_PANTALLA 890
 #define TAM_CELDA 20
 #define MAX_SEGMENTOS 100
-
+#define ANCHO_PANTALLA_COMIDA 1024
+#define ALTO_PANTALLA_COMIDA 850
 /* NUEVO: Constantes para obstáculos y powerups */
 #define MAX_OBSTACULOS 100
 

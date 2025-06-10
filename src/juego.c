@@ -111,8 +111,8 @@ void GenerarPregunta(EstadoJuego *juego)
 
 void GenerarOpcionesComida(EstadoJuego *juego)
 {
-    int maxX = ANCHO_PANTALLA / TAM_CELDA;
-    int maxY = ALTO_PANTALLA / TAM_CELDA;
+    int maxX = ANCHO_PANTALLA_COMIDA / TAM_CELDA;
+    int maxY = ALTO_PANTALLA_COMIDA / TAM_CELDA;
     for (int i = 0; i < 5; i++)
     {
         juego->comidas[i].x = rand() % maxX;
@@ -129,8 +129,8 @@ void IniciarJuego(EstadoJuego *juego)
     juego->puntaje = 0;
     juego->mostrarPregunta = 1;
     juego->comidasCorrectas = 0;
-    juego->numObstaculos = 10;
-    juego->lastObstacleSpawn = 10;
+    juego->numObstaculos = 1;
+    juego->lastObstacleSpawn = 1;
     juego->powerupOnField = 0;
     juego->powerup.activo = 0;
     juego->powerup.tiempoRestante = 0;
@@ -304,18 +304,18 @@ void ActualizarJuego(EstadoJuego *juego)
                         }
                         juego->comidasCorrectas++; // Cada acierto aumenta el contador (y afecta la velocidad).
 
-                        // Spawneo de obstáculos según dificultad.
-                        int threshold = (juego->dificultad == 2) ? 10 : (juego->dificultad == 3 ? 20 : 999);
-                        if (juego->comidasCorrectas >= threshold &&
-                            juego->comidasCorrectas - juego->lastObstacleSpawn >= threshold)
+                        // Spawneo de obstáculos: por cada respuesta correcta se genera 1 obstáculo.
+                        if (juego->comidasCorrectas > juego->numObstaculos && juego->numObstaculos < MAX_OBSTACULOS)
                         {
-                            if (juego->numObstaculos < MAX_OBSTACULOS)
-                            {
-                                juego->obstaculos[juego->numObstaculos].x = rand() % maxX;
-                                juego->obstaculos[juego->numObstaculos].y = rand() % maxY;
-                                juego->numObstaculos++;
-                                juego->lastObstacleSpawn = juego->comidasCorrectas;
-                            }
+                            // Suponiendo que maxX y maxY están definidos (por ejemplo):
+                            // int maxX = ANCHO_PANTALLA / TAM_CELDA;
+                            // int maxY = ALTO_PANTALLA / TAM_CELDA;
+                            juego->obstaculos[juego->numObstaculos].x = rand() % maxX;
+                            juego->obstaculos[juego->numObstaculos].y = rand() % maxY;
+                            juego->numObstaculos++;
+
+                            // Si quieres llevar un registro, puedes actualizar lastObstacleSpawn:
+                            juego->lastObstacleSpawn = juego->comidasCorrectas;
                         }
 
                         // Posible aparición de un powerup (20% de probabilidad).
