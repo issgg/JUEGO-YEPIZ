@@ -68,7 +68,7 @@ void DibujarMenuNivel(void) {
     int centroY = ALTO_PANTALLA / 2;
     DrawTextEx(fuentePersonalizada, "Seleccione Nivel", (Vector2){centroX - MeasureTextEx(fuentePersonalizada, "Seleccione Nivel", 100, 1).x/2, centroY - 100}, 100, 1, PURPLE);
     for (int i = 0; i < numNiveles; i++) {
-        Color color = (i == seleccionNivel) ? RED : BLACK;
+        Color color = (i == seleccionNivel) ? RED : WHITE;
         DrawTextEx(fuentePersonalizada, niveles[i], (Vector2){centroX - MeasureTextEx(fuentePersonalizada, niveles[i], 70, 1).x/2, centroY + i * 60}, 70, 1, color);
     }
 }

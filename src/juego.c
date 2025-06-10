@@ -83,11 +83,6 @@ void GenerarPregunta(EstadoJuego *juego)
             sprintf(juego->pregunta.enunciado, "%d * %d = ? ", a, b);
         }
         break;
-
-    default:
-        result = 0;
-        strcpy(juego->pregunta.enunciado, "Error de dificultad.");
-        break;
     }
 
     juego->pregunta.respuestaCorrecta = result;

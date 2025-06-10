@@ -152,7 +152,7 @@ int main(void)
         else if (estadoPrograma == STATE_JUEGO)
         {
             // Si se alcanza puntos y el jefe aún no se ha activado, pasa a la presentación.
-            if (juego.puntaje >= 1 && juego.boss.activo == 0)
+            if (juego.puntaje >= 10 && juego.boss.activo == 0)
             {
                 estadoPrograma = STATE_PRESENTACION_JEFE;
             }
