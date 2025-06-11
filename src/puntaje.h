@@ -1,10 +1,14 @@
 #ifndef PUNTAJE_H
 #define PUNTAJE_H
 
-#include "juego.h"
+#include "raylib.h"
+#include "juego.h"  // Se asume que aquí se define la estructura EstadoJuego
 
-// Prototipos para la gestión de puntajes.
-void GuardarPuntaje(const EstadoJuego *juego, const char *archivo);
-void MostrarPuntajes(const char *archivo);
+// Función para dibujar la pantalla de puntajes.
+void DibujarPuntajes(void);
+
+// Funciones para el manejo de puntajes en archivo de texto.
+void GuardarPuntaje(const EstadoJuego *juego, const char *nombreArchivo);
+void LeerPuntajes(const char *nombreArchivo);
 
 #endif // PUNTAJE_H

@@ -18,7 +18,8 @@ Texture2D obstaculoImagen;
 
 /* NUEVO: Recurso para el jefe */
 Texture2D bossImage;
-
+Texture2D posion;
+Texture2D escudo;
 // Definiciones de la música.
 Music musicaMenu;
 Music musicaFacil;

@@ -10,7 +10,8 @@
 #define STATE_SELECCION_NIVEL 1
 #define STATE_JUEGO 2
 #define STATE_PRESENTACION_JEFE 3 /* NUEVO: Presentación del jefe */
-#define STATE_BOSS 4              /* NUEVO: Batalla contra el jefe */
+#define STATE_BOSS 4
+#define STATE_PUNTAJES 5 /* NUEVO: Batalla contra el jefe */
 
 int main(void)
 {
@@ -27,6 +28,8 @@ int main(void)
     fondoJuegoMedio = LoadTexture("assets/imagenes/fondo_juego_medio.png");
     fondoJuegoDificil = LoadTexture("assets/imagenes/fondo_juego_dificil.png");
     fondoJuegoExtremo = LoadTexture("assets/imagenes/fondo_juego_extremo.png");
+    posion = LoadTexture("assets/imagenes/posion.png");
+    escudo = LoadTexture("assets/imagenes/escudo.png");
 
     // Cargar la imagen de la manzana.
     manzana = LoadTexture("assets/imagenes/manzana.png");
@@ -82,11 +85,31 @@ int main(void)
         if (estadoPrograma == STATE_MENU)
         {
             int opcion = ActualizarMenu();
-            if (opcion == 0)
-            { // Selecciona "Jugar"
+            switch (opcion)
+            {
+            case 0: // Opción "Jugar"
                 StopMusicStream(musicaMenu);
                 estadoPrograma = STATE_SELECCION_NIVEL;
+                break;
+            case 1: // Opción "Puntajes" (nueva opción)
+                estadoPrograma = STATE_PUNTAJES;
+                break;
+            case 2: // Opción "Salir"
+                CloseWindow();
+                exit(0);
+                break;
+            default:
+                break;
             }
+        }
+        else if (estadoPrograma == STATE_PUNTAJES)
+        {
+            // Se muestra el listado de puntajes.
+            DibujarPuntajes();
+
+            // Al presionar ENTER o ESC, regresa al menú.
+            if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE))
+                estadoPrograma = STATE_MENU;
         }
         else if (estadoPrograma == STATE_SELECCION_NIVEL)
         {
@@ -152,7 +175,7 @@ int main(void)
         else if (estadoPrograma == STATE_JUEGO)
         {
             // Si se alcanza puntos y el jefe aún no se ha activado, pasa a la presentación.
-            if (juego.puntaje >= 10 && juego.boss.activo == 0)
+            if (juego.puntaje >= 5 && juego.boss.activo == 0)
             {
                 estadoPrograma = STATE_PRESENTACION_JEFE;
             }
@@ -216,7 +239,7 @@ int main(void)
                 Vector2 textSize = MeasureTextEx(fuentePersonalizada, "GANASTE!!", 100, 1);
                 DrawTextEx(fuentePersonalizada, "GANASTE!!",
                            (Vector2){ANCHO_PANTALLA / 2 - textSize.x / 2, ALTO_PANTALLA / 2 - textSize.y / 2},
-                           100, 1, RED);
+                           100, 1, WHITE);
                 // Se espera que el usuario presione ENTER para volver al menú.
                 if (IsKeyPressed(KEY_ENTER))
                 {
@@ -241,16 +264,16 @@ int main(void)
                 switch (juego.dificultad)
                 {
                 case 0: // En niveles bajos (aunque el jefe probablemente aparezca en niveles altos)
-                    bossMoveDelay = 0.5;
+                    bossMoveDelay = 0.40;
                     break;
                 case 1:
-                    bossMoveDelay = 0.4;
+                    bossMoveDelay = 0.35;
                     break;
                 case 2:
-                    bossMoveDelay = 0.2;
+                    bossMoveDelay = 0.25;
                     break;
                 case 3: // Extremo: se mueve más rápido (menor retardo)
-                    bossMoveDelay = 0.15;
+                    bossMoveDelay = 0.20;
                     break;
                 }
                 if (currentTime - lastBossMoveTime >= bossMoveDelay)
@@ -341,7 +364,7 @@ int main(void)
             if (juego.boss.activo == 2)
             {
                 // Configuración y dibujo del boss:
-                float desiredBossWidth = 150.0f; // Ancho deseado del boss (en pixeles).
+                float desiredBossWidth = 200.0f; // Ancho deseado del boss (en pixeles).
                 float escalaBoss = desiredBossWidth / (float)bossImage.width;
                 Vector2 posBoss = {juego.boss.x * TAM_CELDA, juego.boss.y * TAM_CELDA};
                 DrawTextureEx(bossImage, posBoss, 0, escalaBoss, WHITE);
@@ -364,9 +387,12 @@ int main(void)
                     if (CheckCollisionRecs(bossRect, segRect))
                     {
                         // Si se tiene immunidad (por ejemplo, POWERUP_IMMUNITY) se ignora, sino: GAME OVER.
-                        if (!(juego.powerup.activo == 1 && juego.powerup.tipo == POWERUP_IMMUNITY))
+                        if (juego.powerup.activo == 1 && juego.powerup.tipo == POWERUP_IMMUNITY)
                         {
-                            juego.mostrarPregunta = 2; // GAME OVER.
+                            DrawTextEx(fuentePersonalizada,
+                                       TextFormat("Invencible: %.1f s", juego.powerup.tiempoRestante),
+                                       (Vector2){10, 10},
+                                       20, 1, WHITE);
                         }
                     }
                 }

@@ -319,12 +319,12 @@ void ActualizarJuego(EstadoJuego *juego)
                         }
 
                         // Posible aparición de un powerup (20% de probabilidad).
-                        if (!juego->powerupOnField && (rand() % 100) < 20)
+                        if (!juego->powerupOnField && (rand() % 100) < 100)
                         {
                             juego->powerupX = rand() % maxX;
                             juego->powerupY = rand() % maxY;
                             if (rand() % 2 == 0)
-                                juego->powerup.tipo = POWERUP_DECREASE;
+                                juego->powerup.tipo = POWERUP_IMMUNITY;
                             else
                                 juego->powerup.tipo = POWERUP_IMMUNITY;
                             juego->powerup.activo = 0;
@@ -398,8 +398,8 @@ void DibujarJuego(EstadoJuego *juego)
     }
     else if (juego->mostrarPregunta == 2)
     {
-        Vector2 textSize = MeasureTextEx(fuentePersonalizada, "GAME OVER", 40, 1);
-        DrawTextEx(fuentePersonalizada, "GAME OVER", (Vector2){ANCHO_PANTALLA / 3.8 - textSize.x / 2, ALTO_PANTALLA / 2 - 20}, 100, 1, BLACK);
+        Vector2 textSize = MeasureTextEx(fuentePersonalizada, "GAME OVER", 40, -75);
+        DrawTextEx(fuentePersonalizada, "GAME OVER", (Vector2){ANCHO_PANTALLA / 4.8 - textSize.x / 2, ALTO_PANTALLA / 2 - 100}, 100, 1, BLACK);
     }
     for (int i = 0; i < juego->numObstaculos; i++)
     {
@@ -416,8 +416,12 @@ void DibujarJuego(EstadoJuego *juego)
     }
     if (juego->powerupOnField)
     {
-        Color pColor = (juego->powerup.tipo == POWERUP_DECREASE) ? WHITE : GREEN;
-        DrawRectangle(juego->powerupX * TAM_CELDA, juego->powerupY * TAM_CELDA, TAM_CELDA, TAM_CELDA, pColor);
+        Texture2D powerupTexture = (juego->powerup.tipo == POWERUP_DECREASE) ? posion : escudo;
+        float scale = (float)TAM_CELDA / (float)powerupTexture.width;
+        DrawTextureEx(powerupTexture,
+                      (Vector2){juego->powerupX * TAM_CELDA, juego->powerupY * TAM_CELDA},
+                      0, scale, WHITE);
     }
+
     DrawTextEx(fuentePersonalizada, TextFormat("Puntaje: %d", juego->puntaje), (Vector2){40, ALTO_PANTALLA - 30}, 30, 1, WHITE);
 }

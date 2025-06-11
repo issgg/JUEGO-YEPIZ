@@ -6,7 +6,7 @@
 // Constantes generales del juego.
 #define ANCHO_PANTALLA 1590
 #define ALTO_PANTALLA 890
-#define TAM_CELDA 20
+#define TAM_CELDA 28
 #define MAX_SEGMENTOS 100
 #define ANCHO_PANTALLA_COMIDA 1024
 #define ALTO_PANTALLA_COMIDA 850
@@ -14,14 +14,14 @@
 #define MAX_OBSTACULOS 100
 
 // Estructura para cada segmento de la serpiente.
-typedef struct
+typedef struct _Serpiente
 {
     int x;
     int y;
 } SegmentoSerpiente;
 
 // Estructura para cada "comida" (opción) que aparece en la pantalla.
-typedef struct
+typedef struct _comida
 {
     int x;
     int y;
@@ -29,7 +29,7 @@ typedef struct
 } FoodOpcion;
 
 // Estructura que almacena una pregunta matemática.
-typedef struct
+typedef struct _pregunta
 {
     char enunciado[64]; // Ej.: "3 + 4 = ?"
     int respuestaCorrecta;
@@ -38,21 +38,21 @@ typedef struct
 } Pregunta;
 
 /* NUEVO: Estructura para obstáculos */
-typedef struct
+typedef struct _obstacule
 {
     int x;
     int y;
 } Obstacle;
 
 /*Tipos y estructura para powerups */
-typedef enum
+typedef enum _Poder
 {
     POWERUP_NONE,
     POWERUP_DECREASE, // Disminuye el tamaño de la serpiente.
     POWERUP_IMMUNITY  // Inmunidad frente a trampas/obstáculos.
 } TipoPowerUp;
 
-typedef struct
+typedef struct _Poderes
 {
     TipoPowerUp tipo;
     int activo;           // 0: inactivo, 1: activo.
@@ -60,7 +60,7 @@ typedef struct
 } PowerUp;
 
 /*Estructura para el jefe */
-typedef struct
+typedef struct _Yepiz
 {
     int x;
     int y;
@@ -71,7 +71,7 @@ typedef struct
 } Boss;
 
 // Estado completo del juego.
-typedef struct
+typedef struct _juego
 {
     SegmentoSerpiente segmentos[MAX_SEGMENTOS];
     int longitud;
